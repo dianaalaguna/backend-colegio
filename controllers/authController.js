@@ -29,17 +29,31 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: "Por favor, ingrese ambos campos" });
     }
 
-    const user = await User.findOne({ username });
-    if (!user) return res.status(400).json({ message: 'Credenciales inválidas Usuario' });
+    const user = await User.findOne({ username }).populate('tipoUsuario');
+
+    if (!user) return res.status(400).json({ message: 'Credenciales inválidas' });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: 'Credenciales inválidas encriptión' });
+    if (!isMatch) return res.status(400).json({ message: 'Credenciales inválidas' });
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: '1h',
     });
 
-    res.json({ token });
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        nombres: user.nombres,
+        apellidos: user.apellidos,
+        estado: user.estado,
+        tipoUsuario: {
+          _id: user.tipoUsuario._id,
+          type: user.tipoUsuario.type
+        }
+      }
+    });
   } catch (err) {
     res.status(500).json({ message: 'Error del servidor' });
   }
