@@ -53,10 +53,10 @@ exports.getSubjectsByName = async (req, res) => {
 
 exports.updateSubjectById = async (req, res) => {
   try {
-    const { _id } = req.params;
+    const { id } = req.params;
     const updatedData = req.body;
 
-    const subject = await Subject.findOneAndUpdate({ _id }, updatedData, {
+    const subject = await Subject.findOneAndUpdate({ _id: id }, updatedData, {
       new: true
     });
 
@@ -70,8 +70,8 @@ exports.updateSubjectById = async (req, res) => {
 
 exports.deleteSubjectById = async (req, res) => {
   try {
-    const { _id } = req.params;
-    const deletedSubject = await Subject.findOneAndDelete({ _id });
+    const { id } = req.params;
+    const deletedSubject = await Subject.findOneAndDelete({ _id: id });
     if (!deletedSubject) return res.status(404).json({ message: 'Materia no encontrada' });
 
     res.json({ message: 'Materia eliminada' });
