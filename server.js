@@ -18,6 +18,7 @@ const taskRoutes = require('./routes/tasks');
 const userTypes = require('./routes/userType');
 const userRoutes = require('./routes/user');
 const studentRoutes = require('./routes/student');
+const subjectRoutes = require('./routes/subject');
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -25,6 +26,7 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/userType', userTypes);
 app.use('/api/user', userRoutes);
 app.use('/api/student', studentRoutes);
+app.use('/api/subject', subjectRoutes);
 
 // Connect to MongoDB
 mongoose

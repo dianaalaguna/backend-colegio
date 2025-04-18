@@ -1,9 +1,3 @@
-
-/*const userTypeSchema = new mongoose.Schema({
-  number: { type: Number, required: true },
-  type: { type: String, required: true }
-});*/
-
 // backend/models/userTypes.js
 const mongoose = require('mongoose');
 
