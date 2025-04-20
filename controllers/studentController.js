@@ -1,6 +1,7 @@
 // backend/controllers/studentController.js
 
 const Student = require('../models/Student');
+const Subject = require('../models/Subject');
 
 exports.createStudent = async (req, res) => {
   try {
@@ -77,5 +78,43 @@ exports.deleteStudentByCode = async (req, res) => {
     res.json({ message: 'Estudiante eliminado' });
   } catch (err) {
     res.status(500).json({ message: 'Error al eliminar estudiante' });
+  }
+};
+
+
+exports.getUnassignedStudentsBySubject = async (req, res) => {
+  try {
+    const { subjectId } = req.params;
+
+    const subject = await Subject.findById(subjectId);
+
+    if (!subject) {
+      return res.status(404).json({ message: 'Asignatura no encontrada' });
+    }
+
+    const assignedIds = subject.estudiantes || [];
+
+    // 1. Buscar los estudiantes que están asignados a la materia (por _id)
+    const assignedStudents = await Student.find(
+      { _id: { $in: assignedIds } },
+      'codigoEstudiante'
+    );
+
+    // 2. Extraer solo los códigos
+    const assignedCodes = assignedStudents.map(student => student.codigoEstudiante);
+
+    // 3. Buscar estudiantes cuyo código NO esté en esa lista
+    const unassignedStudents = await Student.find(
+      { codigoEstudiante: { $nin: assignedCodes } },
+      'codigoEstudiante nombres apellidos correoTutor'
+    );
+
+    res.json(unassignedStudents);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: 'Error al obtener estudiantes no asignados a la asignatura',
+      error: err.message
+    });
   }
 };

@@ -11,5 +11,6 @@ router.get('/getstudentbycode/:codigoEstudiante', authMiddleware, studentControl
 router.get('/getstudentsbyemail/:correoTutor', authMiddleware, studentController.getStudentsByEmail);
 router.put('/updatestudentbycode/:codigoEstudiante', authMiddleware, studentController.updateStudentByCode);
 router.delete('/deletestudentbycode/:codigoEstudiante', authMiddleware, studentController.deleteStudentByCode);
+router.get('/:subjectId/unassigned-students', authMiddleware, studentController.getUnassignedStudentsBySubject);
 
 module.exports = router;
