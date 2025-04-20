@@ -14,6 +14,7 @@ router.delete('/deletesubjectbyid/:id', authMiddleware, subjectController.delete
 router.post('/:subjectId/add-profesor', authMiddleware, subjectController.addProfesorToSubject);
 router.post('/:subjectId/add-estudiante', authMiddleware, subjectController.addEstudianteToSubject);
 router.get('/with-users', authMiddleware, subjectController.getSubjectsWithUsers);
+router.get('/without-professors', authMiddleware, subjectController.getSubjectsWithoutProfessors);
 router.delete('/remove-profesor/:subjectId', authMiddleware, subjectController.removeProfesorFromSubject);
 router.delete('/remove-estudiante/:subjectId', authMiddleware, subjectController.removeEstudianteFromSubject);
 

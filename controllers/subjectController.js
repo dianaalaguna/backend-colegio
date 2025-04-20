@@ -4,7 +4,7 @@ const Subject = require('../models/Subject');
 const User = require('../models/User');
 const Student = require('../models/Student');
 
-// 🔹 Crear materia
+// Crear materia
 exports.createSubject = async (req, res) => {
   try {
     const { nombre, grado, periodo } = req.body;
@@ -23,7 +23,7 @@ exports.createSubject = async (req, res) => {
   }
 };
 
-// 🔹 Obtener todas las materias
+// Obtener todas las materias
 exports.getAllSubjects = async (req, res) => {
   try {
     const subjects = await Subject.find();
@@ -33,7 +33,7 @@ exports.getAllSubjects = async (req, res) => {
   }
 };
 
-// 🔹 Obtener materia por ID
+// Obtener materia por ID
 exports.getSubjectById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -45,7 +45,7 @@ exports.getSubjectById = async (req, res) => {
   }
 };
 
-// 🔹 Obtener materias por nombre
+// Obtener materias por nombre
 exports.getSubjectsByName = async (req, res) => {
   try {
     const { nombre } = req.params;
@@ -59,7 +59,7 @@ exports.getSubjectsByName = async (req, res) => {
   }
 };
 
-// 🔹 Actualizar materia por ID
+// Actualizar materia por ID
 exports.updateSubjectById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -77,7 +77,7 @@ exports.updateSubjectById = async (req, res) => {
   }
 };
 
-// 🔹 Eliminar materia por ID
+// Eliminar materia por ID
 exports.deleteSubjectById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -90,7 +90,7 @@ exports.deleteSubjectById = async (req, res) => {
   }
 };
 
-// 🔸 NUEVO: Asociar profesor a materia
+// Asociar profesor a materia
 exports.addProfesorToSubject = async (req, res) => {
   try {
     const { subjectId } = req.params;
@@ -112,7 +112,7 @@ exports.addProfesorToSubject = async (req, res) => {
   }
 };
 
-// 🔸 NUEVO: Vincular estudiante a materia
+// Vincular estudiante a materia
 exports.addEstudianteToSubject = async (req, res) => {
   try {
     const { subjectId } = req.params;
@@ -134,7 +134,7 @@ exports.addEstudianteToSubject = async (req, res) => {
   }
 };
 
-// 🔸 NUEVO: Obtener materias con profesores y estudiantes
+// Obtener materias con profesores y estudiantes
 exports.getSubjectsWithUsers = async (req, res) => {
   try {
     const subjects = await Subject.find()
@@ -144,6 +144,24 @@ exports.getSubjectsWithUsers = async (req, res) => {
     res.json(subjects);
   } catch (err) {
     res.status(500).json({ message: 'Error al obtener materias con usuarios', error: err.message });
+  }
+};
+
+exports.getSubjectsWithoutProfessors = async (req, res) => {
+  try {
+    const subjects = await Subject.find({
+      $or: [
+        { profesores: { $exists: false } },
+        { profesores: { $size: 0 } }
+      ]
+    }).populate('estudiantes', 'nombres apellidos codigoEstudiante');
+
+    res.json(subjects);
+  } catch (err) {
+    res.status(500).json({
+      message: 'Error al obtener materias sin profesores',
+      error: err.message,
+    });
   }
 };
 
