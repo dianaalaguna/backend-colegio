@@ -29,6 +29,7 @@ app.use('/api/student', studentRoutes);
 app.use('/api/subject', subjectRoutes);
 
 // Connect to MongoDB
+// Tener presente la variable MONGO_URI
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
